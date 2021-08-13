@@ -252,5 +252,136 @@ class Pengajuan extends Controller
   
   }
 
+
+  public function laporan(){
+    
+    $key = env('APP_KEY');
+
+    $token = Session::get('token');
+
+    $tokenDb = M_Admin::where('token', $token)->count();
+
+    if($tokenDb > 0){
+      $pengajuan = M_Pengajuan::where('status', '2')->paginate(15);
+      $dataP = array();
+      foreach($pengajuan as $p){
+        $pengadaan = M_Pengadaan::where('id_pengadaan', $p->id_pengadaan)->first();
+
+        $sup = M_Suplier::where('id_suplier', $p->id_suplier)->first();
+
+        $c_laporan = M_Laporan::where('id_pengajuan', $p->id_pengajuan)->count();
+
+        $laporan = M_Laporan::where('id_pengajuan', $p->id_pengajuan)->first();
+
+        if($c_laporan > 0){
+          $dataP[] = array(
+            "id_pengajuan" => $p->id_pengajuan,
+            "nama_pengadaan" => $pengadaan->nama_pengadaan,
+            "gambar" => $pengadaan->gambar,
+            "anggaran" => $pengadaan->anggaran,
+            "proposal" => $p->proposal,
+            "anggaran_pengajuan" => $p->anggaran,
+            "status_pengajuan" => $p->status,
+            "nama_suplier" => $sup->nama_usaha,
+            "email_suplier" => $sup->email,
+            "alamat_suplier" => $sup->alamat,
+            "laporan" => $laporan->laporan
+
+  
+          );
+
+        }
+        
+      }
+      $data['pengajuan'] = $dataP;
+      
+        return view('admin.laporan', $data);
+    }else{
+        return redirect('/masukAdmin')->with('gagal','Silahkan Login terlebih dahulu');
+    }   
+  }
+
+
+  public function selesaiPengajuan($id){
+    $token = Session::get('token');
+    $tokenDb = M_Admin::where('token', $token)->count();
+
+    if($tokenDb > 0){
+      if(M_Pengajuan::where('id_pengajuan', $id)->update(
+        [
+          "status" => "3"
+        ]
+      )){
+        
+        return redirect('/laporan')->with('berhasil', 'Status Pengajuan Berhasil diubah');
+      }else{
+        return redirect('/laporan')->with('gagal', 'Status Pengajuan Gagal diubah');
+      }
+
+    }else{
+      return redirect('/masukAdmin')->with('gagal','Silahkan Login terlebih dahulu');
+    }
+
+  }
+
+
+
+  public function pengajuanselesai(){
+    $key = env('APP_KEY');
+  $token = Session::get('token');
+  $tokenDb = M_Suplier::where('token', $token)->count();
+
+  $decode = JWT::decode($token, $key, array('HS256'));
+  $decode_array = (array) $decode;
+
+
+  if($tokenDb > 0){
+    $pengajuan = M_Pengajuan::where('id_suplier', $decode_array['id_suplier'])->where('status', '3')->get();
+
+    $dataArr = array();
+
+    foreach($pengajuan as $p){
+      $pengadaan = M_Pengadaan::where('id_pengadaan', $p->id_pengadaan)->first();
+
+      $sup = M_Suplier::where('id_suplier', $decode_array['id_suplier'])->first();
+
+      $lapCount = M_Laporan::where('id_pengajuan', $p->id_pengajuan)->count();
+
+      $lap = M_Laporan::where('id_pengajuan', $p->id_pengajuan)->first();
+
+      if($lapCount > 0){
+        $lapLink = $lap->laporan;
+
+      }else{
+        $lapLink = "-";
+
+      }
+
+      $dataArr[] = array(
+        "id_pengajuan" => $p->id_pengajuan,
+        "nama_pengadaan" => $pengadaan->nama_pengadaan,
+        "gambar" => $pengadaan->gambar,
+        "anggaran" => $pengadaan->anggaran,
+        "proposal" => $p->proposal,
+        "anggaran_pengajuan" => $p->anggaran,
+        "status_pengajuan" => $p->status,
+        "nama_suplier" => $sup->nama_usaha,
+        "email_suplier" => $sup->email,
+        "alamat_suplier" => $sup->alamat,
+        "laporan" => $lapLink
+      );
+    }
+    $data['pengajuan'] = $dataArr;
+    return view('login_sup.pengajuanselesai', $data);
+
+  }else{
+    return redirect('/listSuplier')->with('gagal', 'Pengajuan sudah pernah dilakukan');
+  }
+
+  }
+
+
+  
+
 //tag penutup
 }

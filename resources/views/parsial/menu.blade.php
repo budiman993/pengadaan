@@ -38,6 +38,15 @@
                 Pengajuan
               </p>
             </a>
-          </li>     
+          </li>
+          <li class="nav-item">
+            <a href="/laporan" class="nav-link">
+              <i class="nav-icon fas fa-list"></i>
+              <p>
+                Laporan Pengajuan
+              </p>
+            </a>
+          </li>  
+          
         </ul>
       </nav>
