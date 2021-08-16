@@ -61,7 +61,9 @@
           <h2>Kami memberikan kesempatan kepada UMKM yang ingin mengajukan pengajuan barang atau jasa yang dimiliki</h2>
           <div class="d-flex justify-content-center justify-content-lg-start">
           @if($token == "kosong")
-            <a href="#about" class="btn-get-started scrollto">Daftar Sekarang</a>
+            <a href="/registrasi" class="btn-get-started scrollto">Daftar Sekarang</a>
+          @else
+          <a href="/listSuplier" class="btn-get-started scrollto">Ajukan Sekarang</a>
           @endif
             <a href="https://www.youtube.com/watch?v=jDDaplaOz7Q" class="glightbox btn-watch-video"><i class="bi bi-play-circle"></i><span>Watch Video</span></a>
           </div>
@@ -159,22 +161,7 @@
       </div>
     </section><!-- End Services Section -->
 
-    <!-- ======= Cta Section ======= -->
-    <section id="cta" class="cta">
-      <div class="container" data-aos="zoom-in">
-
-        <div class="row">
-          <div class="col-lg-9 text-center text-lg-start">
-            <h3>Ajukan Pengajuan</h3>
-            <p> Kamu dapat daftarkan usaha kamu agar mengajukan pengajuan dari setiap bidang yang dibutuhkan</p>
-          </div>
-          <div class="col-lg-3 cta-btn-container text-center">
-            <a class="cta-btn align-middle" href="#">Call To Action</a>
-          </div>
-        </div>
-
-      </div>
-    </section><!-- End Cta Section -->
+  
 
     <!-- ======= Portfolio Section ======= -->
     <section id="portfolio" class="portfolio">
@@ -208,6 +195,27 @@
     </section><!-- End Portfolio Section -->
     <div class="d-flex justify-content-center">{{$pengadaan->links()}}</div>
     
+      <!-- ======= Cta Section ======= -->
+      <section id="cta" class="cta">
+      <div class="container" data-aos="zoom-in">
+
+        <div class="row">
+          <div class="col-lg-9 text-center text-lg-start">
+            <h3>Ajukan Pengajuan</h3>
+            <p> Kamu dapat daftarkan usaha kamu agar mengajukan pengajuan dari setiap bidang yang dibutuhkan</p>
+          </div>
+          <div class="col-lg-3 cta-btn-container text-center">
+          @if($token == "kosong")
+          <a class="cta-btn align-middle" href="/registrasi">Daftar Sekarang</a>
+          @else
+          <a class="cta-btn align-middle" href="/listSuplier">Ajukan Sekarang</a>
+          @endif
+            
+          </div>
+        </div>
+
+      </div>
+    </section><!-- End Cta Section -->
    
 
     

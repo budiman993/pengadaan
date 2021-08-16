@@ -60,7 +60,7 @@ class Suplier extends Controller
                     )){
                         //kalau berhasil update token di database
                         Session::put('token', $jwt);
-                        return redirect('/');
+                        return redirect('/listSuplier');
 
                     }else{
                         //jika password salah

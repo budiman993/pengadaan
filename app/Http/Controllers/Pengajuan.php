@@ -19,6 +19,8 @@ use Illuminate\Support\Facades\Validator;
 //impor fungsi encrypt
 use Illuminate\Contracts\Encryption\DecryptException;
 
+use Illuminate\Support\Facades\Storage;
+
 use App\M_Admin;
 use App\M_Pengajuan;
 use App\M_Suplier;
@@ -285,7 +287,8 @@ class Pengajuan extends Controller
             "nama_suplier" => $sup->nama_usaha,
             "email_suplier" => $sup->email,
             "alamat_suplier" => $sup->alamat,
-            "laporan" => $laporan->laporan
+            "laporan" => $laporan->laporan,
+            "id_laporan" => $laporan->id_laporan
 
   
           );
@@ -380,7 +383,35 @@ class Pengajuan extends Controller
 
   }
 
+  public function tolakLaporan($id){
+    $token = Session::get('token');
+    $tokenDb = M_Admin::where('token', $token)->count();
 
+    if($tokenDb > 0 ){
+        $laporan = M_Laporan::where('id_laporan', $id)->count();
+        if($laporan > 0){
+            $dataLaporan = M_Laporan::where('id_laporan', $id)->first();
+
+            if(Storage::delete($dataLaporan->laporan)){
+
+                if(M_Laporan::where('id_laporan', $id)->delete()){
+                    return redirect('/laporan')->with('berhasil', 'Laporan berhasil ditolak');
+                }else{
+                    return redirect('/laporan')->with('gagal', 'Laporan gagal ditolak');
+                }
+
+            }else{
+                return redirect('/laporan')->with('gagal', 'Laporan gagal dihapus');
+            }
+
+        }else{
+            return redirect('/laporan')->with('gagal', 'Data gagal ditemukan');
+        }
+
+    }else{
+        return redirect('/masukAdmin')->with('gagal', 'Anda sudah logout, silahkan login kembali');
+    }
+}
   
 
 //tag penutup

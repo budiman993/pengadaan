@@ -130,15 +130,15 @@
                         Menunggu Konfirmasi
                         @endif
                         @if($p['status_pengajuan'] == 2)
-                        Telah Diterima
+                        Telah Diterima, Submit Laporan Pertanggung Jawaban
                         <hr>
                         @if($p['laporan'] == "-")
                         <form action="/tambahLaporan" method="post" enctype="multipart/form-data">
                       {{csrf_field()}}
                       <input type="hidden" name="id_pengajuan" id="id_pengajuan" value="{{$p['id_pengajuan']}}">
-                      <label for="laporan" class="btn btn-block btn-outline-info btn-flat">Laporan Pengajuan</label>
+                      <label for="laporan" class="btn btn-block btn-outline-info btn-flat">Pilih File Laporan</label>
                       <input type="file" name="laporan" id="laporan" class="form-control" style="display: none;" accept="application/pdf">
-                      <button type="submit" class="btn btn-primary btn-sm">Upload</button>
+                      <button type="submit" class="btn btn-primary btn-sm">Submit</button>
                         </form>
                         @else
                         <a href="{{asset(Storage::url($p['laporan']))}}" class="btn btn-warning btn-sm" target="_blank"><i class="fa fa-eye"></i> Lihat Laporan</a>

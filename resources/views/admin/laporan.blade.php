@@ -135,7 +135,8 @@
                         @if($p['status_pengajuan'] == 2)
                         Laporan Sedang Ditinjau
                         <hr>
-                        <a href="/selesaiPengajuan/{{$p['id_pengajuan']}}" class="btn btn-primary btn-sm konfirmasi">Selesai</a>
+                        <a href="/selesaiPengajuan/{{$p['id_pengajuan']}}" class="btn btn-primary btn-sm konfirmasi"><i class="fa fa-check"></i>Diterima</a>
+                        <a href="/tolakLaporan/{{$p['id_laporan']}}" class="btn btn-danger btn-sm konfirmasi"><i class="fa fa-times"></i>Ditolak</a>
                         @endif
                       </td>
                     </tr>
