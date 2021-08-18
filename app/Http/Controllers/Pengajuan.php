@@ -59,6 +59,8 @@ class Pengajuan extends Controller
 
         );
       }
+
+      $data['adm'] = M_Admin::where('token', $token)->first();
       $data['pengajuan'] = $dataP;
         return view('pengajuan.list', $data);
     }else{
@@ -199,6 +201,8 @@ class Pengajuan extends Controller
           "laporan" => $lapLink
         );
       }
+      $data['sup'] = M_Suplier::where('token', $token)->first();
+
       $data['pengajuan'] = $dataArr;
       return view('login_sup.riwayat_pengajuan', $data);
 
@@ -296,6 +300,7 @@ class Pengajuan extends Controller
         }
         
       }
+      $data['adm'] = M_Admin::where('token', $token)->first();
       $data['pengajuan'] = $dataP;
       
         return view('admin.laporan', $data);
@@ -374,8 +379,12 @@ class Pengajuan extends Controller
         "laporan" => $lapLink
       );
     }
+
+    $data['sup'] = M_Suplier::where('token', $token)->first();
     $data['pengajuan'] = $dataArr;
     return view('login_sup.pengajuanselesai', $data);
+    
+    
 
   }else{
     return redirect('/listSuplier')->with('gagal', 'Pengajuan sudah pernah dilakukan');

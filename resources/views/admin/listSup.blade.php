@@ -55,7 +55,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Pengajuan Masuk</h1>
+            <h1>List Data Admin</h1>
           </div>
           
         </div>
@@ -66,10 +66,13 @@
     <section class="content">
       <div class="container-fluid">
         <div class="row">
-          <div class="col-12">
+            
+          
+         
+
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Pengajuan Masuk</h3>
+                <h3 class="card-title">Data Suplier</h3>
 
                 <div class="card-tools">
                   <div class="input-group input-group-sm" style="width: 150px;">
@@ -87,54 +90,32 @@
               <div class="card-body table-responsive p-0">
                 <table class="table table-hover text-nowrap">
                   <thead>
-                    <tr>
-                      <th>Nama Pengadaan</th>
-                      <th>Gambar</th>
-                      <th>Anggaran</th>
-                      <th>Proposal</th>
-                      <th>Anggaran Pengajuan</th>
-                      <th>Supplier</th>
+                    <tr class="text-center">
+                      <th>Nama Usaha</th>
                       <th>Email</th>
                       <th>Alamat</th>
-                      <th>Laporan</th>
-                      <th>Status Pengajuan</th>
+                      <th>No NPWP</th>
+                      <th></th>
                       
                     </tr>
                   </thead>
                   <tbody>
-                    @foreach($pengajuan as $p)
+                      @foreach($suplier as $sup)
                     <tr>
-                      <td>{{$p['nama_pengadaan']}}</td>
-                      <td style="width:15%;"><img style="width:70%;" src="{{asset(Storage::url($p['gambar']))}}">
-                        </td>
+                      <td>{{$sup->nama_usaha}}</td>
+                      <td>{{$sup->email}}</td>
+                      <td>{{$sup->alamat}}</td>
+                      <td>{{$sup->no_npwp}}</td>
                       <td>
-                        Rp. 
-                      {{number_format($p['anggaran'],0,",",".")}}</td>
-                      <td>
-                        <a class="btn btn-primary btn-sm" href="{{asset(Storage::url($p['proposal']))}}" target="_blank">Lihat Detail</a>
-                      </td>
-                      <td>Rp. 
-                      {{number_format($p['anggaran_pengajuan'],0,",",".")}}</td>
-                      <td>{{$p['nama_suplier']}}</td>
-                      <td>{{$p['email_suplier']}}</td>
-                      <td>{{$p['alamat_suplier']}}</td>
-                      
-                      <td>
-                        @if($p['status_pengajuan'] == 2)
-                        <a href="{{asset(Storage::url($p['laporan']))}}" class="btn btn-secondary btn-sm" target="_blank"><i class="fa fa-eye"></i> Lihat Laporan</a>
-                        @endif
-                      </td>
-                      <td>
-                        @if($p['status_pengajuan'] == 2)
-                        Laporan Sedang Ditinjau
-                        <hr>
-                        <a href="/selesaiPengajuan/{{$p['id_pengajuan']}}" class="btn btn-primary btn-sm konfirmasi"><i class="fa fa-check"></i>Diterima</a>
-                        <a href="/tolakLaporan/{{$p['id_laporan']}}" class="btn btn-danger btn-sm konfirmasi"><i class="fa fa-times"></i>Ditolak</a>
-                        @endif
-                      </td>
+                          @if($sup->status == 0)
+                          <a href="/Aktif/{{$sup->id_suplier}}" class="btn btn-sm btn-success konfirmasi"><i class="fa fa-check"></i> Verifikasi</a>
+                          @else
+                          <a href="/nonAktif/{{$sup->id_suplier}}" class="btn btn-sm btn-danger konfirmasi"><i class="fa fa-times"></i> Non Aktif</a>
+                          @endif
+                         
+                    </td>
                     </tr>
-                    @endforeach
-                  
+                   @endforeach
                   </tbody>
                 </table>
               </div>
@@ -150,6 +131,8 @@
   </div>
   <!-- /.content-wrapper -->
   @include('parsial.footer')
+  @include('admin.tambah')
+  @include('admin.ubah')
 
   <!-- Control Sidebar -->
   <aside class="control-sidebar control-sidebar-dark">
@@ -168,7 +151,7 @@
 <!-- SweetAlert2 -->
 <script src="{{asset('adminLTE/plugins/sweetalert2/sweetalert2.min.js')}}"></script>
 <script>
-$(function() {
+  $(function() {
     var Toast = Swal.mixin({
       toast: true,
       position: 'top-end',
@@ -190,9 +173,28 @@ $(function() {
     @endif
     
 
+    @if(count($errors) > 0)
+    Toast.fire({
+        icon: 'error',
+        title: '<ul>@foreach($errors->all() as $error)<li>{{$error}}</li>@endforeach </ul>'
+      })
+    @endif
   });
 
-$(document).on("click", ".konfirmasi", function(event){
+
+//   $(document).on("click", ".ubah", function(){
+//     var nama = $(this).data('nama');
+//     var email = $(this).data('email');
+//     var alamat = $(this).data('alamat');
+//     var id_admin = $(this).data('id_admin');
+
+//     $(".nama").val(nama);
+//     $(".email").val(email);
+//     $(".alamat").val(alamat);
+//     $(".id_admin").val(id_admin);
+//   });
+
+  $(document).on("click", ".konfirmasi", function(event){
     event.preventDefault();
     const url = $(this).attr('href');
 
@@ -203,6 +205,10 @@ $(document).on("click", ".konfirmasi", function(event){
 
     }
   });
-</script>
+
+
+  </script>
+
+
 </body>
 </html>

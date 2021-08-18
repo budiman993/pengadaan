@@ -35,6 +35,7 @@ class Pengadaan extends Controller
         $tokenDb = M_Admin::where('token', $token)->count();
 
     if($tokenDb > 0){
+        $data['adm'] = M_Admin::where('token', $token)->first();
 
         $data['pengadaan'] = M_Pengadaan::where('status', '1')->paginate(15);
 
@@ -175,6 +176,8 @@ class Pengadaan extends Controller
 
     if($tokenDb > 0){
 
+        $data['sup'] = M_Suplier::where('token', $token)->first();
+        
         $data['pengadaan'] = M_Pengadaan::where('status', '1')->paginate(15);
 
         return view('login_sup.pengadaan', $data);

@@ -21,6 +21,7 @@ use Illuminate\Contracts\Encryption\DecryptException;
 
 //impor model suplier
 use App\M_Suplier;
+use App\M_Admin;
 
 class Suplier extends Controller
 {
@@ -96,6 +97,62 @@ class Suplier extends Controller
 
         }
 
+    }
+
+    public function listSup(){
+        $token = Session::get('token');
+
+        $data['adm'] = M_Admin::where('token', $token)->first();
+
+        $tokenDb = M_Admin::where('token', $token)->count();
+
+        if($tokenDb > 0){
+            $data['suplier'] = M_Suplier::paginate(15);
+            return view('admin.listSup', $data);
+
+        }else{
+            return redirect('/masukAdmin')->with('gagal', 'Anda sudah logout, silahkan login kembali');
+        }
+    }
+
+    public function nonAktif($id){
+        $token = Session::get('token');
+
+        $tokenDb = M_Admin::where('token', $token)->count();
+
+        if($tokenDb > 0){
+           if(M_Suplier::where('id_suplier', $id)->update([
+               "status" => "0"
+           ])){
+            return redirect('/listSup')->with('berhasil', 'Data berhasil di update');
+
+           }else{
+            return redirect('/listSup')->with('gagal', 'Data gagal di update');
+           }
+
+        }else{
+            return redirect('/masukAdmin')->with('gagal', 'Anda sudah logout, silahkan login kembali');
+        }
+    }
+
+    public function Aktif($id){
+        $token = Session::get('token');
+
+        $tokenDb = M_Admin::where('token', $token)->count();
+
+        if($tokenDb > 0){
+           if(M_Suplier::where('id_suplier', $id)->update([
+               "status" => "1"
+           ])){
+            return redirect('/listSup')->with('berhasil', 'Data berhasil di update');
+
+           }else{
+            return redirect('/listSup')->with('gagal', 'Data gagal di update');
+           }
+
+        }else{
+            return redirect('/masukAdmin')->with('gagal', 'Anda sudah logout, silahkan login kembali');
+        }
     }
 
 }

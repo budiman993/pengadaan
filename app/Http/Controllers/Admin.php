@@ -96,6 +96,7 @@ class Admin extends Controller
         $tokenDb = M_Admin::where('token', $token)->count();
 
         if($tokenDb > 0){
+            $data['adm'] = M_Admin::where('token', $token)->first();
             $data['admin'] = M_Admin::where('status', '1')->paginate(15);
             return view('admin.list', $data);
 
