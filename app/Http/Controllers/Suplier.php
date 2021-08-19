@@ -155,4 +155,41 @@ class Suplier extends Controller
         }
     }
 
+    public function ubahPassword(Request $request){
+        $token = Session::get('token');
+
+        $tokenDb = M_Suplier::where('token', $token)->count();
+        if($tokenDb > 0){
+            $key = env('APP_KEY');
+            $sup = M_Suplier::where('token', $token)->first();
+
+
+
+            $decode = JWT::decode($token, $key, array('HS256'));
+            $decode_array = (array) $decode;
+
+            if(decrypt($sup->password) == $request->passwordlama){
+                if(M_Suplier::where('id_suplier', $decode_array['id_suplier'])->update([
+                    "password" => encrypt($request->password)
+                ])){
+                 return redirect('/login')->with('gagal', 'Password berhasil di update');
+     
+                }else{
+                 return redirect('/listSuplier')->with('gagal', 'Password gagal di update');
+                }
+
+            }else{
+                return redirect('/listSuplier')->with('gagal', 'Password gagal di update, Password  Lama tidak sama');
+            }
+
+
+            
+ 
+         }else{
+             return redirect('/login')->with('gagal', 'Anda sudah logout, silahkan login kembali');
+         }
+
+        
+    }
+
 }
