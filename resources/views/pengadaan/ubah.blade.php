@@ -3,12 +3,12 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Tambah Data Pengadaan</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Ubah Data Pengadaan</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form action="" method="post" role="form" class="php-email-form" enctype="multipart/form-data">
+      <form action="/ubahPengadaan" method="post" role="form" class="php-email-form" enctype="multipart/form-data">
           {{csrf_field()}}
           <input type="hidden" name="id_pengadaan" id="id_pengadaan" class="id_pengadaan"></input>
       <div class="modal-body">

@@ -168,6 +168,40 @@ class Pengadaan extends Controller
             return redirect('/masukAdmin')->with('gagal', 'Anda sudah logout, silahkan login kembali');
         }
     }
+    
+    public function ubahPengadaan(Request $request){
+
+        $token = Session::get('token');
+        $tokenDb = M_Admin::where('token', $token)->count();
+
+        if($tokenDb > 0){
+            $this->validate($request,[
+                'u_nama_pengadaan' => 'required',
+                'u_deskripsi'  => 'required',
+                'u_anggaran'  => 'required'
+                
+            ]);
+
+            
+
+            if(M_Pengadaan::where('id_pengadaan', $request->id_pengadaan)->update([
+                
+                "nama_pengadaan" => $request->u_nama_pengadaan,
+                "deskripsi" => $request->u_deskripsi,
+                "anggaran" => $request->u_anggaran
+                
+            ])){
+                return redirect('/listPengadaan')->with('berhasil', 'Data berhasil disimpan');
+
+            }else{
+                return redirect('/listPengadaan')->with('gagal', 'Data gagal disimpan');
+            }
+
+        }else{
+            return redirect('/masukAdmin')->with('gagal', 'Anda sudah logout, silahkan login kembali');
+        }
+
+    }
 
     public function listSuplier(){
         $token = Session::get('token');

@@ -28,6 +28,7 @@ Route::get('/listAdmin', 'Admin@listAdmin');
 Route::post('/tambahAdmin', 'Admin@tambahAdmin');
 Route::post('/ubahAdmin', 'Admin@ubahAdmin');
 Route::get('/hapusAdmin/{id}', 'Admin@hapusAdmin');
+Route::post('/ubahPengadaan', 'Pengadaan@ubahPengadaan');
 Route::get('/listPengadaan', 'Pengadaan@index');
 Route::post('/tambahPengadaan', 'Pengadaan@tambahPengadaan');
 Route::get('/hapusGambar/{id}', 'Pengadaan@hapusGambar');
